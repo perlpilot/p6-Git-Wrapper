@@ -4,6 +4,10 @@ class Git::Wrapper::Log {
     has $.email;
     has $.date;
     has $.message;
+
+    method summary() {
+        return self.message.split("\n").[0];
+    }
 }
 
 grammar Git::Log::Parser {
