@@ -15,10 +15,7 @@ class Git::Wrapper {
     method run($subcommand, *@positionals, *%named) {
         my $old-dir = $*CWD;
         chdir($.gitdir);
-        my $optstr = '';
-        for %named.kv -> $k, $v {
-            $optstr ~= $v eqv Bool::True ??  "-$k" !! "--$k='$v'";
-        }
+        my $optstr = join " ", map -> $k,$v { $v eqv Bool::True ??  "-$k" !! "--$k='$v'" }, %named.kv;
         @positionals.push(".") if $subcommand eq 'clone' && +@positionals == 1;
         my $git-cmd = "$.git-executable $subcommand $optstr @positionals[] 2>/dev/null";
         my $p = open $git-cmd, :p or die;
