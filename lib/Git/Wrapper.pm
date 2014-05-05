@@ -54,10 +54,5 @@ class Git::Wrapper {
     method rm(*@p,*%n) { return self.run('rm',|@p, |%n); }
     method tag(*@p,*%n) { return self.run('tag',|@p, |%n); }
 
-#    for <init clone branch checkout> -> $sub {
-#        my $str = 'method ' ~ $sub ~ ' (*@p, *%n) { return self.run("' ~ $sub ~ '", |@p, |%n); };';
-#        EVAL "$str";
-#    }
-
 }
 
