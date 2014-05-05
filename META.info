@@ -5,3 +5,4 @@
     "author"        : "Jonathan Scott Duff",
     "depends"       : [],
     "source-url"    : "git://github.com/perlpilot/p6-Git-Wrapper.git"
+}
