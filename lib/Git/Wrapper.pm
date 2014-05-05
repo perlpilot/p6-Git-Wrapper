@@ -20,7 +20,7 @@ class Git::Wrapper {
             $optstr ~= $v eqv Bool::True ??  "-$k" !! "--$k='$v'";
         }
         @positionals.push(".") if $subcommand eq 'clone' && +@positionals == 1;
-        my $git-cmd = "$.git-executable $subcommand $optstr @positionals[]";
+        my $git-cmd = "$.git-executable $subcommand $optstr @positionals[] 2>/dev/null";
         my $p = open $git-cmd, :p or die;
         my @out = $p.slurp;
         chdir($old-dir);
@@ -31,26 +31,36 @@ class Git::Wrapper {
         return self.run('version');
     }
 
-    method log(*%_) {
-        my @output = self.run('log');
+    method log(*@p, *%n) {
+        my @output = self.run('log', |@p, |%n);
         my $log-parser = Git::Log::Parser.parse(@output.join, :actions(Git::Log::Actions.new));
-        return $log-parser.made;
+        return $log-parser.made.list;
     }
 
-    method init() {
-        return self.run('init');
-    }
+    method init(*@p, *%n) { return self.run('init', |@p, |%n); }
+    method clone(*@p, *%n) { return self.run('clone', |@p, |%n); }
+    method branch(*@p, *%n) { return self.run('branch', |@p, |%n); }
+    method checkout(*@p,*%n) { return self.run('checkout',|@p, |%n); }
+    method add(*@p,*%n) { return self.run('add',|@p, |%n); }
+    method pull(*@p,*%n) { return self.run('pull',|@p, |%n); }
+    method reset(*@p,*%n) { return self.run('reset',|@p, |%n); }
+    method rebase(*@p,*%n) { return self.run('rebase',|@p, |%n); }
+    method push(*@p,*%n) { return self.run('push',|@p, |%n); }
+    method fetch(*@p,*%n) { return self.run('fetch',|@p, |%n); }
+    method commit(*@p,*%n) { return self.run('commit',|@p, |%n); }
+    method show(*@p,*%n) { return self.run('show',|@p, |%n); }
+    method status(*@p,*%n) { return self.run('status',|@p, |%n); }
+    method diff(*@p,*%n) { return self.run('diff',|@p, |%n); }
+    method grep(*@p,*%n) { return self.run('grep',|@p, |%n); }
+    method merge(*@p,*%n) { return self.run('merge',|@p, |%n); }
+    method mv(*@p,*%n) { return self.run('mv',|@p, |%n); }
+    method rm(*@p,*%n) { return self.run('rm',|@p, |%n); }
+    method tag(*@p,*%n) { return self.run('tag',|@p, |%n); }
 
-    method clone($url, *%_) {
-        return self.run('clone', $url);
-    }
+#    for <init clone branch checkout> -> $sub {
+#        my $str = 'method ' ~ $sub ~ ' (*@p, *%n) { return self.run("' ~ $sub ~ '", |@p, |%n); };';
+#        EVAL "$str";
+#    }
 
-    method branch($branchname?, *%_) {
-        return self.run('branch', $branchname, |%_);
-    }
-
-    method checkout($thingy, *%_) {
-        return self.run('checkout', $thingy, |%_);
-    }
 }
 
