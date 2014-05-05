@@ -2,6 +2,7 @@ class Git::Wrapper::Log {
     has $.sha1;
     has $.author;
     has $.email;
+    has $.date;
     has $.message;
 }
 
@@ -38,7 +39,7 @@ class Git::Log::Actions {
     method commit($/) { 
         make Git::Wrapper::Log.new(
             sha1 => ~$<sha1>, author => ~$<author>.trim, email => ~$<email>,
-            message => $<message>.made,
+            date => ~$<date>, message => $<message>.made,
         )
     }
     method message($/) {
