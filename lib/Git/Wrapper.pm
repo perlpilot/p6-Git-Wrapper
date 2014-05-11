@@ -29,6 +29,7 @@ class Git::Wrapper {
     }
 
     method log(*@p, *%n) {
+        %n<date> = "iso8601";
         my @output = self.run('log', |@p, |%n);
         my $log-parser = Git::Log::Parser.parse(@output.join, :actions(Git::Log::Actions.new));
         return $log-parser.made.list;

@@ -41,9 +41,11 @@ class Git::Log::Actions {
         make [ $<commit>».made ];
     }
     method commit($/) { 
+        my $isodate = ~$<date>;
+        $isodate.=subst(' ', 'T', :n(1)).=subst(' ', '');
         make Git::Wrapper::Log.new(
             sha1 => ~$<sha1>, author => ~$<author>.trim, email => ~$<email>,
-            date => ~$<date>, message => $<message>.made,
+            date => DateTime.new($isodate), message => $<message>.made,
         )
     }
     method message($/) {
