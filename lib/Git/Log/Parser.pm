@@ -12,7 +12,7 @@ class Git::Wrapper::Log {
 
 grammar Git::Log::Parser {
     token TOP {
-        ^ [ <commit>  [$$ \n]? ]+ $
+        ^ <commit>+  % [$$ \n] $
     }
 
     token commit {
