@@ -35,8 +35,11 @@ class Git::Wrapper {
         return $log-parser.made.list;
     }
 
+    method clone(*@p, *%n) {
+        return self.run('clone', |@p, |%n); 
+    }
 
-    for <init clone branch checkout add pull rebase reset push fetch commit show status diff grep merge mv rm tag> -> $method {
+    for <init branch checkout add pull rebase reset push fetch commit show status diff grep merge mv rm tag> -> $method {
         Git::Wrapper.HOW.add_method(Git::Wrapper, $method, anon method (*@p, *%n) {
             return self.run($method, |@p, |%n); 
         });
