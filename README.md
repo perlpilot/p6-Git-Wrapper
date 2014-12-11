@@ -6,8 +6,8 @@ Hacky way to use git from Perl 6 "inspired" by Perl 5's version of the module of
 ## SYNOPSIS
 
     my $git = Git::Wrapper.new( 
-        git-executable     => '/path/to/git',
-        gitdir              => '/foo/bar',
+        git-executable     => '/path/to/git',   # optional
+        gitdir             => '/foo/bar',
     );
 
     $git.version;       # version of git being used
@@ -21,11 +21,8 @@ Hacky way to use git from Perl 6 "inspired" by Perl 5's version of the module of
 
     my $git = Git::Wrapper.new( gitdir => "/path/to/existing/dir" );
     $git.clone("https://github.com/rakudo/rakudo.git");
-    my @log = $git.log( date => 'iso8601' );
+    my @log = $git.log;
 
     for @log -> $l {
-        my $d = $l.date;
-        $d.=subst( ' ', 'T', :n(1)).=subst( ' ', '');   # make it so DateTime can parse the date
-        my $dt = DateTime.new($d);                      # just 'cuz
-        say "{$l.author} $dt {$l.summary}";
+        say "{$l.author} {$l.date} {$l.summary}";
     }
