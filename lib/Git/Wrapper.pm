@@ -19,7 +19,7 @@ class Git::Wrapper {
         @positionals.push(".") if $subcommand eq 'clone' && +@positionals == 1;
         my $git-cmd = "$.git-executable $subcommand $optstr @positionals[] 2>/dev/null";
         my $p = open $git-cmd, :p or die;
-        my @out = $p.slurp;
+        my @out = $p.slurp-rest;
         chdir($old-dir);
         return @out;
     }
