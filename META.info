@@ -7,8 +7,8 @@
   "test-depends" : [ ],
   "depends" : [ ],
   "provides" : {
-    "Git::Wrapper" : "lib/Git/Wrapper.pm"
-    "Git::Wrapper::Log" : "lib/Git/Log/Parser.pm",
+    "Git::Wrapper" : "lib/Git/Wrapper.pm",
+    "Git::Wrapper::Log" : "lib/Git/Log/Parser.pm"
   },
   "support" : {
     "source" : "git://github.com/perlpilot/p6-Git-Wrapper.git"
