@@ -17,6 +17,7 @@ grammar Git::Log::Parser {
 
     token commit {
         ^^ 'commit' <.ws> <sha1> $$ \n
+        [^^ 'Merge:' <.ws> <sha1> <.ws> <sha1> $$ \n]?
         ^^ 'Author:' <.ws> <author> <?before <.ws> > '<' ~ '>' <email> $$ \n
         ^^ 'Date:' <.ws> <date> $$ \n
         ^^ $$ \n
@@ -28,7 +29,7 @@ grammar Git::Log::Parser {
     token author { <-[ \< ] >+ }
 
     token email { <-[ \> ] >+ }
-    
+
     token date { \N+ }
 
     token message { <indented-line>+ }
@@ -37,10 +38,10 @@ grammar Git::Log::Parser {
 }
 
 class Git::Log::Actions {
-    method TOP($/) { 
+    method TOP($/) {
         make [ $<commit>».made ];
     }
-    method commit($/) { 
+    method commit($/) {
         my $isodate = ~$<date>;
         $isodate.=subst(' ', 'T', :n(1)).=subst(' ', '');
         make Git::Wrapper::Log.new(
